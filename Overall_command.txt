@@ -1,0 +1,10 @@
+# SGSeq analysis is performed on Rscript AS_SGSeq.R
+# Prepare the annotation file required by featurCounts 
+gunzip hg38.ensGene.gtf.gz
+# Adapt the python script from https://github.com/vivekbhr/Subread_to_DEXSeq
+python3 dexseq_prepare_annotation2.py -f hg38.ensGene.flat.gtf hg38.ensGene.gtf hg38.ensGene.DEXSeq.gff
+# Count the reads
+featureCounts -f -O -p -T 4 -a hg38.ensGene.flat.gtf -o heart_liver.count.txt heart1_ERR315328.sorted.bam heart2_ERR315389.sorted.bam heart3_ERR315435.sorted.bam liver_ERR315327.sorted.bam liver_ERR315414.sorted.bam liver_ERR315463.sorted.bam
+featureCounts -f -O -p -T 4 -a hg38.ensGene.flat.gtf -o kid_brain.count.txt kidney_ERR315383.sorted.bam kidney_ERR315443.sorted.bam kidney_ERR315468.sorted.bam kidney_ERR315494.sorted.bam braina_ERR315432.sorted.bam brainb_ERR315477.sorted.bam brainc_ERR315455.sorted.bam
+featureCounts -f -O -p -T 4 -a hg38.ensGene.flat.gtf -o kid_heart.count.txt kidney_ERR315383.sorted.bam kidney_ERR315443.sorted.bam kidney_ERR315468.sorted.bam kidney_ERR315494.sorted.bam heart1_ERR315328.sorted.bam heart2_ERR315389.sorted.bam heart3_ERR315435.sorted.bam
+# Load into DEXSeq to infer the differential exon usage using the Rscript AS_DEXSeq.R
