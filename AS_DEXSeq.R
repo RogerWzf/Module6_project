@@ -84,23 +84,4 @@ plotDEXSeq( res, "ENSG00000134198", expression=FALSE, splicing=TRUE,
 # Output a HTML file for visualization
 DEXSeqHTML( res, genes = genesForSubset, color=c("#FF000080", "#0000FF80") )
 
-# Clean the output table and save it
-logname <- grep(names(res), pattern = 'log2fold', value = TRUE)
-res.clean <- as(res[, c('groupID', 'featureID', 'exonBaseMean', 
-                        logname, 'dispersion', 'stat', 'pvalue', 'padj')], 'data.frame')
-names(res.clean)<- c("EnsemblID", "exonID", "meanBase", "log2FoldChange", 
-                     "dispersion", "stat", "pvalue")
-res.clean$FDR <- p.adjust(res.clean$pvalue, method = 'fdr') 
-res.clean$chromosome <- as.character(seqnames( res$genomicData))
-res.clean$exon.start <- start(res$genomicData)
-res.clean$exon.end <- end(res$genomicData)
-res.clean <- res.clean[, c("EnsemblID", "exonID", "meanBase", 
-                           "log2FoldChange", "dispersion", "stat", "pvalue", 
-                           "FDR", "chromosome", "exon.start", "exon.end")]  ### reorder the names nicely
-res.clean <- res.clean[ order(res.clean$pvalue),]
-# Store the output
-write.csv(res.clean, quote = FALSE,
-          file="DEXSeq_result.txt",
-          row.names = FALSE)
-
 sessionInfo()
