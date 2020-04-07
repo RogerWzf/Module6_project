@@ -1,6 +1,6 @@
 # SGSeq analysis is performed on Rscript AS_SGSeq.R
 # Prepare the annotation file required by featurCounts 
-gunzip hg38.ensGene.gtf.gz
+gunzip GTF/hg38.ensGene.gtf.gz
 # Adapt the python script from https://github.com/vivekbhr/Subread_to_DEXSeq
 python3 dexseq_prepare_annotation2.py -f hg38.ensGene.flat.gtf hg38.ensGene.gtf hg38.ensGene.DEXSeq.gff
 # Count the reads
