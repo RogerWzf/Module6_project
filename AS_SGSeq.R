@@ -42,10 +42,11 @@ bam_df <- data.frame(sample_name, file_bam, stringsAsFactors = FALSE)
 sample_info <- getBamInfo(bam_df)
 
 # Transcript annotation file
-txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
-txdb <- keepSeqlevels(txdb, c('chr1','chr7','chr11','chr12'))
+tx <- importTranscripts("GTF/hg38.ensGene.gtf")
+
 # transcript features are extracted from the TxDb object
-txf <- convertToTxFeatures(txdb)
+txf_ens <- convertToTxFeatures(tx)
+txf_ens <- keepSeqlevels(txf_ens, c('chr1','chr7','chr11','chr12'))
 
 # Genomic coordinates of 6 Tetraspanins
 TSPAN2 <- GRanges("chr1", IRanges(start=115048011, end=115089503),
@@ -64,7 +65,7 @@ tspan <- GRangesList(TSPAN2=TSPAN2,CD9=CD9,
                      TSPAN12=TSPAN12,CD81=CD81,
                      CD151=CD151,CD63=CD63)
 # Only features overlapping the genomic locus of the tspan of interest
-txf_tspan <- txf[txf %over% tspan]
+txf_tspan <- txf_ens[txf_ens %over% tspan]
 
 #############################################################
 ###  Splice graph analysis based on annotated transcripts ###
